@@ -1,4 +1,4 @@
-package com.server.authserver.controllers;
+package com.server.authserver.model.controllers;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;

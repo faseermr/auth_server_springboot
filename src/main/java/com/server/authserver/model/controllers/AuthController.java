@@ -1,4 +1,4 @@
-package com.server.authserver.controllers;
+package com.server.authserver.model.controllers;
 
 import com.server.authserver.model.ERole;
 import com.server.authserver.model.Role;
@@ -12,6 +12,7 @@ import com.server.authserver.repositary.UserRepositary;
 import com.server.authserver.security.jwt.JwtUtills;
 import com.server.authserver.security.service.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -59,6 +60,7 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
+
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
@@ -68,6 +70,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+        System.out.println("body : "+signUpRequest.getUsername() + " " +signUpRequest.getRole());
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
@@ -101,7 +104,7 @@ public class AuthController {
                         roles.add(adminRole);
 
                         break;
-                    case "mod":
+                    case "teacher":
                         Role modRole = roleRepository.findByName(ERole.ROLE_TEACHER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(modRole);
